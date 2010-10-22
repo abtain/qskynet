@@ -35,6 +35,17 @@ Step 3: Setup Ruby environment
     $ rvm --default ruby-1.9.2
     $ # can test with ruby -v
 
+Step 4: Setup dotfiles
+    $ curl  http://q3.abtain.com/static/dotfiles/gemrc > /home/quellhorst/.gemrc
+    $ curl  http://q3.abtain.com/static/dotfiles/irbrc > /home/quellhorst/.irbrc
+    
+Step 5: Install default Ruby gems
+
+
+Step 6: Install Mysql server
+    $ curl http://q3.abtain.com/static/scripts/mysql.sh > /home/quellhorst/mysql.sh
+    $ source mysql.sh
+    $ mysql_install "PaSSword1"
 
 Static Assets
 -------------
