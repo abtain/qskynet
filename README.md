@@ -16,6 +16,26 @@ gems.
 QSKYNET follows [Readme Driven Development](http://tom.preston-werner.com/2010/08/23/readme-driven-development.html)
 
 
+Installation
+------------
+
+Step 1: Install QSKYNET
+
+    $ git clone git@github.com:abtain/qskynet.git
+
+Step 2: SSH into remote system.
+    $ ssh quellhorst@10.0.0.5
+
+Step 3: Setup Ruby environment
+    $ sudo apt-get install curl git-core build-essential zlib1g-dev libssl-dev libreadline5-dev -y
+    $ bash < <( curl http://rvm.beginrescueend.com/releases/rvm-install-head )
+    $ echo 'if [[ -s "$HOME/.rvm/scripts/rvm" ]]  ; then source "$HOME/.rvm/scripts/rvm" ; fi' >> ~/.bashrc
+    $ # test new terminal with `rvm notes` see if there is output
+    $ rvm install 1.9.2
+    $ rvm --default ruby-1.9.2
+    $ # can test with ruby -v
+
+
 Static Assets
 -------------
 
