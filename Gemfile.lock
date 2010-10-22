@@ -1,0 +1,10 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    s3sync (1.2.5)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  s3sync (= 1.2.5)
