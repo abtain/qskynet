@@ -22,6 +22,8 @@ Installation
 Step 1: Install QSKYNET
 
     $ git clone git@github.com:abtain/qskynet.git
+    # install required gems
+    $ bundle install
 
 Step 2: SSH into remote system.
     $ ssh quellhorst@10.0.0.5
@@ -40,7 +42,7 @@ Step 4: Setup dotfiles
     $ curl  http://q3.abtain.com/static/dotfiles/irbrc > /home/quellhorst/.irbrc
     
 Step 5: Install default Ruby gems
-
+    $ bash < <( curl http://q3.abtain.com/static/scripts/gems.sh )
 
 Step 6: Install Mysql server
     $ curl http://q3.abtain.com/static/scripts/mysql.sh > /home/quellhorst/mysql.sh
