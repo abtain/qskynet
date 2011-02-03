@@ -183,10 +183,16 @@ function install_rvm_dependencies {
   install_package curl bison build-essential zlib1g-dev libssl-dev libreadline5-dev libxml2-dev git-core
 }
 
+function install_rvm_profile {
+  echo "source '/usr/local/lib/rvm'" >> .bashrc
+  source ~/.bashrc
+}
+
 function install_rvm {
   export rvm_group_name="rvm"
   install_rvm_dependencies
   bash < <( curl -L http://bit.ly/rvm-install-system-wide )
+  install_rvm_profile
 }
 
 ########
@@ -220,17 +226,17 @@ function install_sudo {
 
 function install_passenger {
   # Set up Nginx and Passenger
-  log "Installing Nginx and Passenger"
+  #log "Installing Nginx and Passenger"
   gem install passenger
   passenger-install-nginx-module --auto --auto-download --prefix="/usr/local/nginx"
-  log "Passenger and Nginx installed"
+  #log "Passenger and Nginx installed"
 
   # Configure nginx to start automatically
   wget http://library.linode.com/web-servers/nginx/installation/reference/init-deb.sh
   cat init-deb.sh | sed 's:/opt/:/usr/local/:' > /etc/init.d/nginx
   chmod +x /etc/init.d/nginx
   /usr/sbin/update-rc.d -f nginx defaults
-  log "Nginx configured to start automatically"
+  #log "Nginx configured to start automatically"
 }
 
 ###################
@@ -253,7 +259,7 @@ function set_hostname {
 
 ADMIN_LOGIN=deploy
 #read -p "Admin account password:" ADMIN_PASSWORD
-ADMIN_PASSWORD=$1
+ADMIN_PASSWORD=`cat metadata.txt`
 
 system_update
 set_hostname
@@ -262,3 +268,6 @@ install_sudo
 create_sudo_user
 install_rvm
 install_passenger
+
+# TODO Set Time Zone
+# TODO Set Time via NTP
