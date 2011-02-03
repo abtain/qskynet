@@ -90,7 +90,7 @@ function mysql_tune {
 
 	sed -i -e 's/^#skip-innodb/skip-innodb/' /etc/mysql/my.cnf # disable innodb - saves about 100M
 
-	MEM=$(awk '/MemTotal/ {print int($2/1024)}' /proc/meminfo) # how much memory in MB this system has
+	MEM=$(system_memory) # how much memory in MB this system has
 	MYMEM=$((MEM*PERCENT/100)) # how much memory we'd like to tune mysql with
 	MYMEMCHUNKS=$((MYMEM/4)) # how many 4MB chunks we have to play with
 
@@ -175,6 +175,64 @@ function mysql_grant_user {
 
 }
 
+#######
+# RVM #
+#######
+
+function install_rvm_dependencies {
+  install_package curl bison build-essential zlib1g-dev libssl-dev libreadline5-dev libxml2-dev git-core
+}
+
+function install_rvm {
+  export rvm_group_name="rvm"
+  install_rvm_dependencies
+  bash < <( curl -L http://bit.ly/rvm-install-system-wide )
+}
+
+########
+# SUDO #
+########
+
+function create_sudo_group {
+  groupadd wheel
+  # add group to sudoers
+  cp /etc/sudoers /etc/sudoers.tmp
+  chmod 0640 /etc/sudoers.tmp
+  echo "%wheel ALL = (ALL) ALL" >> /etc/sudoers.tmp
+  chmod 0440 /etc/sudoers.tmp
+  mv /etc/sudoers.tmp /etc/sudoers
+}
+
+function create_sudo_user {
+  useradd -m -s /bin/bash -G wheel "$ADMIN_LOGIN"
+  echo "${ADMIN_LOGIN}:${ADMIN_PASSWORD}" | chpasswd
+  usermod -a -G "$GROUP_NAME" "$ADMIN_LOGIN"
+}  
+
+function install_sudo {
+  install_package sudo
+  create_sudo_group
+}
+
+#############
+# Passenger #
+#############
+
+function install_passenger {
+  # Set up Nginx and Passenger
+  log "Installing Nginx and Passenger"
+  gem install passenger
+  passenger-install-nginx-module --auto --auto-download --prefix="/usr/local/nginx"
+  log "Passenger and Nginx installed"
+
+  # Configure nginx to start automatically
+  wget http://library.linode.com/web-servers/nginx/installation/reference/init-deb.sh
+  cat init-deb.sh | sed 's:/opt/:/usr/local/:' > /etc/init.d/nginx
+  chmod +x /etc/init.d/nginx
+  /usr/sbin/update-rc.d -f nginx defaults
+  log "Nginx configured to start automatically"
+}
+
 ###################
 # Other niceties! #
 ###################
@@ -186,3 +244,20 @@ function goodstuff {
   sed -i -e "s/^#alias ll='ls -l'/alias ll='ls -al'/" /root/.bashrc # enable ll list long alias <3
 }
 
+# Sets the hostname to the reverse dns
+function set_hostname {
+  hostname `reverse_primary_ip`
+}
+
+#### the meat, to be extracted ####
+
+$ADMIN_LOGIN=deploy
+read -p "Admin account password:" ADMIN_PASSWORD
+
+system_update
+set_hostname
+goodstuff
+install_sudo
+create_sudo_user
+install_rvm
+install_passenger
