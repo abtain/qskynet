@@ -229,12 +229,17 @@ function install_sudo {
 #############
 # Passenger #
 #############
+function install_passenger_dependencies {
+  install_package libcurl4-openssl-dev 
+}
 
 function install_passenger {
   # Set up Nginx and Passenger
+  install_passenger_dependencies
   #log "Installing Nginx and Passenger"
-  gem install passenger
-  passenger-install-nginx-module --auto --auto-download --prefix="/usr/local/nginx"
+  rvm use 1.9.2
+  /usr/local/rvm/rubies/ruby-1.9.2-p136/bin/gem install passenger
+  /usr/local/rvm/gems/ruby-1.9.2-p136/bin/passenger-install-nginx-module --auto --auto-download --prefix="/usr/local/nginx"
   #log "Passenger and Nginx installed"
 
   # Configure nginx to start automatically
