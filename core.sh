@@ -272,13 +272,25 @@ ADMIN_LOGIN=deploy
 #read -p "Admin account password:" ADMIN_PASSWORD
 ADMIN_PASSWORD=`cat metadata.txt`
 
-system_update
-set_hostname
-goodstuff
-install_sudo
-create_sudo_user
-install_rvm
-install_passenger
+#system_update
+#set_hostname
+#goodstuff
+#install_sudo
+#create_sudo_user
+#install_rvm
+#install_passenger
+
+read -p "MySQL root password:" DB_PASSWORD
+read -p "MySQL user:" DB_USER
+read -p "MySQL user password:" DB_USER_PASSWORD
+read -p "MySQL new database name:" DB_NAME
+
+mysql_install "$DB_PASSWORD" && mysql_tune 40
+#echo "Mysql installed" >> $logfile
+mysql_create_database "$DB_PASSWORD" "$DB_NAME"
+mysql_create_user "$DB_PASSWORD" "$DB_USER" "$DB_USER_PASSWORD"
+mysql_grant_user "$DB_PASSWORD" "$DB_USER" "$DB_NAME"
 
 # TODO Set Time Zone
 # TODO Set Time via NTP
+# TODO fix deploy user, add to wheel group
