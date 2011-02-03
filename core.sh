@@ -190,6 +190,7 @@ function install_rvm_profile {
 
 function install_ruby {
   rvm install ruby-1.9.2-p136
+  rvm --default use 1.9.2
 }
 
 function install_rvm {
@@ -266,11 +267,11 @@ ADMIN_LOGIN=deploy
 #read -p "Admin account password:" ADMIN_PASSWORD
 ADMIN_PASSWORD=`cat metadata.txt`
 
-#system_update
-#set_hostname
-#goodstuff
-#install_sudo
-#create_sudo_user
+system_update
+set_hostname
+goodstuff
+install_sudo
+create_sudo_user
 install_rvm
 install_passenger
 
