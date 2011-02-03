@@ -188,11 +188,16 @@ function install_rvm_profile {
   source ~/.bashrc
 }
 
+function install_ruby {
+  rvm install ruby-1.9.2-p136
+}
+
 function install_rvm {
   export rvm_group_name="rvm"
   install_rvm_dependencies
   bash < <( curl -L http://bit.ly/rvm-install-system-wide )
   install_rvm_profile
+  install_ruby
 }
 
 ########
@@ -261,11 +266,11 @@ ADMIN_LOGIN=deploy
 #read -p "Admin account password:" ADMIN_PASSWORD
 ADMIN_PASSWORD=`cat metadata.txt`
 
-system_update
-set_hostname
-goodstuff
-install_sudo
-create_sudo_user
+#system_update
+#set_hostname
+#goodstuff
+#install_sudo
+#create_sudo_user
 install_rvm
 install_passenger
 
