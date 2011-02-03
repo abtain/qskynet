@@ -251,9 +251,9 @@ function set_hostname {
 
 #### the meat, to be extracted ####
 
-$ADMIN_LOGIN=deploy
+ADMIN_LOGIN=deploy
 #read -p "Admin account password:" ADMIN_PASSWORD
-$ADMIN_PASSWORD=$1
+ADMIN_PASSWORD=$1
 
 system_update
 set_hostname
